@@ -433,11 +433,8 @@ digraph G {
 "@scala.scalanative.libc.stdlib"->"#java.lang.Object";
 "@cl.fbd.GC2::extern.GC_gcollect"->"@cl.fbd.GC2";
 "@scala.scalanative.libc.stdlib::extern.fprintf"->"@scala.scalanative.libc.stdlib";
-"@cl.fbd.Main::ptr2Int_ptr_i32"->"@scala.scalanative.libc.stdlib::extern.stdout";
 "@cl.fbd.Main::ptr2Int_ptr_i32"->"@cl.fbd.stdlib2";
 "@cl.fbd.Main::ptr2Int_ptr_i32"->"@cl.fbd.stdio";
-"@cl.fbd.Main::ptr2Int_ptr_i32"->"@scala.scalanative.libc.stdlib";
-"@cl.fbd.Main::ptr2Int_ptr_i32"->"@scala.scalanative.libc.stdlib::extern.fprintf";
 "@cl.fbd.Main::ptr2Int_ptr_i32"->"@cl.fbd.stdlib2::extern.atoi";
 "@cl.fbd.Main::ptr2Int_ptr_i32"->"@scala.scalanative.runtime.GC";
 "@cl.fbd.Main::ptr2Int_ptr_i32"->"@cl.fbd.stdio::extern.sprintf";
