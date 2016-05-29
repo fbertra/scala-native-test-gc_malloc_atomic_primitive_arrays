@@ -1,8 +1,8 @@
 Test gc_malloc_native_primitive_arrays
 ======================================
 
-This app is a test for future Pull Request gc_malloc_native_primitive_arrays 
-(PR preview at https://github.com/fbertra/scala-native/tree/gc_malloc_native_primitive_arrays)
+This app is a test for future Pull Request gc_malloc_atomic_primitive_arrays 
+(PR preview at https://github.com/fbertra/scala-native/tree/gc_malloc_atomic_primitive_arrays)
 
 Boehm GC is an conservative garbage collector (see http://stackoverflow.com/questions/7629446/conservative-garbage-collector).  If a 
 integer variable holds a value equals to an pointer address, Boehm GC won't collect the address.
@@ -84,10 +84,18 @@ After useMem() completes, the free bytes don't change between gc: 10186752
 Boehm ignores the content of main()::arr and free the memory inmediately.
 
 
+Important note
+--------------
+
+GC Boehm doesn't always free the memory.  Consecutive executions of the
+program behave diferently.  This is very inconvenient, because we need a
+automatic test that always behave the same.
+
+
+
 TBD
 ---
 
-Check that Scala-Native doesn't implement a Array[Ptr [_]] with a primitive array.
 
 Check that non primitives arrays aren't affected by the PR.
 
