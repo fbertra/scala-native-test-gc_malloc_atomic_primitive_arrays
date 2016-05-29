@@ -5,7 +5,7 @@ lazy val root = project.in(file(".")).
     settings (ScalaNativePlugin.projectSettings ++ Seq (
       organization := "cl.fbd",
       
-      name := "sn-test-gc_malloc_native_primitive_arrays",
+      name := "sn-test-gc_malloc_atomic_primitive_arrays",
 
       version      := "0.1",
 

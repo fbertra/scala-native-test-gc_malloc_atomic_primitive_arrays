@@ -10,7 +10,17 @@ import scalanative.libc.stdlib._
 
 object Main {
   def main (args : Array [String]) = {
-    fprintf(stdout, c"Test Boehm GC\n")
+    testArrayInt ()
+    
+    ()
+  }
+  
+  /*
+   * 
+   */
+   
+  def testArrayInt () : Unit = {
+    fprintf(stdout, c"Test Array[Int]\n")
     
     // this array will "remember" a C pointer cast as a Int value 
     val arr = new Array [Int] (2)
@@ -19,24 +29,22 @@ object Main {
     val heapSizeBefore = GC2.GC_get_heap_size ()
     val freeBytesBefore = GC2.GC_get_free_bytes ()
           
-    fprintf(stdout, c"main (): before useMem\n")
+    fprintf(stdout, c"testArrayInt (): before useMemReturnInt\n")
     
     fprintf(stdout, c"heap size: %d\n", heapSizeBefore)
     fprintf(stdout, c"free bytes: %d\n", freeBytesBefore)
     fprintf(stdout, c"\n")
     
-    // the array allocated inside useMem should be candidate to garbage collection
-    // but arr (0) retains the pointer value as a integer
-    arr (0) = useMem ()
+    arr (0) = useMemReturnInt ()
 
-    // The conservative GC treats the Int value as a potential pointer and
-    //   don't reclaim the memory    
+    // even if arr (0) is equals to an pointer address, GC Boehm should collect
+    // the memory because we now allocate Array[Int] with GC_malloc_atomic    
     GC2.GC_gcollect ()
     
     val heapSizeAfter1 = GC2.GC_get_heap_size ()
     val freeBytesAfter1 = GC2.GC_get_free_bytes()
           
-    fprintf(stdout, c"main (): after useMem and after first gc\n")
+    fprintf(stdout, c"testArrayInt (): after useMemReturnInt and after first gc\n")
     
     fprintf(stdout, c"ptr address as Int %d\n", arr (0))
     
@@ -47,10 +55,10 @@ object Main {
     // forget the pointer    
     arr (0) = 0
 
-    // as arr don't hold the pointer value anymore, Boehm GC can claims the memory 
+    // we shouldn't see any change
     GC2.GC_gcollect ()
     
-    fprintf(stdout, c"main (): after forgetting the pointer Int value and after second gc\n")
+    fprintf(stdout, c"testArrayInt (): after forgetting the pointer Int value and after second gc\n")
     
     val heapSizeAfter2 = GC2.GC_get_heap_size ()
     val freeBytesAfter2 = GC2.GC_get_free_bytes()
@@ -63,11 +71,14 @@ object Main {
   }
 
   /*
-   * allocates a big array
-   * return the pointer casted as a Int
+   * Allocates memory. 
+   * 
+   * The memory is unreachable after this function return
+   * 
+   * return an Int equals to the address of the allocated memory
    */
    
-  def useMem () : Int = {
+  def useMemReturnInt () : Int = {
     import scalanative.runtime
     
     val ptr = GC.malloc (10000000).cast[Ptr[Byte]]
@@ -99,10 +110,8 @@ object Main {
     // do something with the memory (force the use of the array)
     !ptr = 'H'
     
-    // cast the pointer as integer and return the value 
+    // cast the pointer as integer 
     ptr2Int (ptr)
-    
-    // the array should be candidate to garbage collection
   }
   
   /*
