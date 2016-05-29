@@ -1,7 +1,8 @@
 Test gc_malloc_native_primitive_arrays
 ======================================
 
-This app is a test for future Pull Request gc_malloc_native_primitive_arrays.
+This app is a test for future Pull Request gc_malloc_native_primitive_arrays 
+(PR preview at https://github.com/fbertra/scala-native/tree/gc_malloc_native_primitive_arrays)
 
 Boehm GC is an conservative garbage collector (see http://stackoverflow.com/questions/7629446/conservative-garbage-collector).  If a 
 integer variable holds a value equals to an pointer address, Boehm GC won't collect the address.
