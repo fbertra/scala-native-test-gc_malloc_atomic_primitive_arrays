@@ -11,34 +11,33 @@ As Scala primitve arrays shouldn't contains pointer address, the PR calls GG_mal
 Result with version based on GC_malloc (pre PR)
 -----------------------------------------------
 
-'''
-Test Boehm GC
-main (): before useMem
-heap size: 65536
-free bytes: 57344
+> Test Boehm GC
+> main (): before useMem
+> heap size: 65536
+> free bytes: 57344
+> 
+> 
+> useMem (): before gc
+> ptr address hex: 0x227e000, int: 36167680
+> heap size: 10199040
+> free bytes: 188416
+> 
+> 
+> useMem (): after gc
+> heap size: 10199040
+> free bytes: 188416
+> 
+> 
+> main (): after useMem and after first gc
+> ptr address as Int 36167680
+> heap size: 10199040
+> free bytes: 188416
+> 
+> 
+> main (): after forgetting the pointer Int value and after second gc
+> heap size: 10199040
+> free bytes: 10190848
 
-
-useMem (): before gc
-ptr address hex: 0x227e000, int: 36167680
-heap size: 10199040
-free bytes: 188416
-
-
-useMem (): after gc
-heap size: 10199040
-free bytes: 188416
-
-
-main (): after useMem and after first gc
-ptr address as Int 36167680
-heap size: 10199040
-free bytes: 188416
-
-
-main (): after forgetting the pointer Int value and after second gc
-heap size: 10199040
-free bytes: 10190848
-'''
 
 Free bytes inside useMem and after useMem are equals: 188416.  
 Even if the array "useMem ()::ptr" is unreachable from main(), Boehm GC doesn't free the memory because main()::arr(0) contains
@@ -46,38 +45,38 @@ a integer equals to the pointer address.
 
 The memory is freed after setting main()::arr(0) to 0
 
+
 Results with version based on GC_malloc_atomic (post PR)
 --------------------------------------------------------
 
-'''
-Test Boehm GC
-main (): before useMem
-heap size: 65536
-free bytes: 53248
+> Test Boehm GC
+> main (): before useMem
+> heap size: 65536
+> free bytes: 53248
+> 
+> 
+> useMem (): before gc
+> ptr address hex: 0x234e000, int: 37019648
+> heap size: 10199040
+> free bytes: 184320
+> 
+> 
+> useMem (): after gc
+> heap size: 10199040
+> free bytes: 184320
+> 
+> 
+> main (): after useMem and after first gc
+> ptr address as Int 37019648
+> heap size: 10199040
+> free bytes: 10186752
+> 
+> 
+> main (): after forgetting the pointer Int value and after second gc
+> heap size: 10199040
+> free bytes: 10186752
 
 
-useMem (): before gc
-ptr address hex: 0x234e000, int: 37019648
-heap size: 10199040
-free bytes: 184320
-
-
-useMem (): after gc
-heap size: 10199040
-free bytes: 184320
-
-
-main (): after useMem and after first gc
-ptr address as Int 37019648
-heap size: 10199040
-free bytes: 10186752
-
-
-main (): after forgetting the pointer Int value and after second gc
-heap size: 10199040
-free bytes: 10186752
-
-'''
 
 After useMem() completes, the free bytes don't change between gc: 10186752 
 
